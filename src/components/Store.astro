@@ -1,0 +1,486 @@
+---
+interface Product {
+    id: number;
+    title: string;
+    price: number;
+    image: string;
+}
+
+interface CartItem extends Product {
+    quantity: number;
+}
+
+const cartCreationDate = new Date().toLocaleString();
+---
+
+<store-window></store-window>
+
+<template id="store-window-template">
+    <div class="window" id="storeWindow">
+        <div class="title-bar" id="dragHandle">
+            <div class="title-bar-text">Tienda El Topo</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize" id="minimizeBtn"></button>
+                <button aria-label="Maximize" id="maximizeBtn"></button>
+                <button aria-label="Close" id="closeBtn"></button>
+            </div>
+        </div>
+        <div class="window-body">
+            <div class="field-row" style="margin-bottom: 20px;">
+                <label>Agregar al carrito:</label>
+                <input type="text" placeholder="ID del Producto" id="productId">
+                <input type="number" placeholder="Cantidad" id="quantity" min="1">
+                <button id="addToCart">Agregar</button>
+                <button id="viewProducts">Ver Productos</button>
+            </div>
+
+            <div id="cartContent">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Producto</th>
+                            <th>Cant</th>
+                            <th>Precio Unit.</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cartItems">
+                        <tr>
+                            <td colspan="6" style="text-align: center">
+                                El carrito está vacío
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" style="text-align: end">Total:</td>
+                            <td colspan="1" id="totalAmount" style="font-weight: bold;">
+                                $0
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="status-bar">
+                <p>Carrito creado: {cartCreationDate}</p>
+            </div>
+        </div>
+ 
+        <div class="resize-handle"></div>
+    </div>
+</template>
+
+<script>
+import { WindowControls } from '../scripts/WindowControls';
+
+interface CartItem {
+    id: number;
+    title: string;
+    price: number;
+    image: string;
+    quantity: number;
+}
+
+class StoreWindow extends HTMLElement {
+    private cart: CartItem[] = [];
+    
+    constructor() {
+        super();
+        const template = document.getElementById('store-window-template') as HTMLTemplateElement;
+        const content = template.content.cloneNode(true) as DocumentFragment;
+        this.appendChild(content);
+
+        // Create taskbar item
+        const taskbarItems = document.getElementById('taskbarItems');
+        const taskbarItem = document.createElement('button');
+        taskbarItem.className = 'taskbar-item active';
+        taskbarItem.innerHTML = `
+            <img src="/assets/agent.png" alt="Store" width="16" height="16">
+            Tienda El Topo
+        `;
+        taskbarItems?.appendChild(taskbarItem);
+
+        // Initialize window controls
+        const storeWindow = this.querySelector('#storeWindow') as HTMLElement;
+        new WindowControls(storeWindow, taskbarItem);
+
+        // Load saved cart and initialize event listeners
+        this.loadCart();
+        this.initializeEventListeners();
+    }
+
+    private loadCart() {
+        const savedCart = localStorage.getItem('cart');
+        if (savedCart) {
+            this.cart = JSON.parse(savedCart);
+            this.updateCartDisplay();
+        }
+    }
+
+    private initializeEventListeners() {
+        this.querySelector('#addToCart')?.addEventListener('click', () => this.addToCart());
+        this.querySelector('#viewProducts')?.addEventListener('click', () => {
+            const productElement = document.createElement('div');
+            productElement.innerHTML = '<product-list></product-list>';
+            document.body.appendChild(productElement.firstElementChild!);
+        });
+    }
+
+    private async addToCart() {
+        const quantityInput = this.querySelector('#quantity') as HTMLInputElement;
+        const productIdInput = this.querySelector('#productId') as HTMLInputElement;
+        
+        const quantity = parseInt(quantityInput.value);
+        const productId = parseInt(productIdInput.value);
+
+        if (!quantity || !productId) {
+            this.showError('Por favor ingrese ID y cantidad válidos');
+            return;
+        }
+
+        if (productId < 1 || productId > 20) {
+            this.showError('El ID del producto debe estar entre 1 y 20');
+            return;
+        }
+
+        try {
+            const response = await fetch(`https://fakestoreapi.com/products/${productId}`);
+            if (!response.ok) {
+                throw new Error('Producto no encontrado');
+            }
+            
+            const product = await response.json();
+            
+            const existingItemIndex = this.cart.findIndex(item => item.id === product.id);
+            
+            if (existingItemIndex !== -1) {
+                this.cart[existingItemIndex].quantity += quantity;
+            } else {
+                this.cart.push({ ...product, quantity });
+            }
+
+            localStorage.setItem('cart', JSON.stringify(this.cart));
+            this.updateCartDisplay();
+
+            quantityInput.value = '';
+            productIdInput.value = '';
+        } catch (error: any) {
+            if (error instanceof TypeError && !navigator.onLine) {
+                this.showError('No hay conexión a internet. Por favor, verifique su conexión.');
+            } else {
+                this.showError(error.message || 'Error al agregar el producto al carrito');
+            }
+        }
+    }
+
+    private updateCartDisplay() {
+        const cartItems = this.querySelector('#cartItems');
+        const totalAmount = this.querySelector('#totalAmount');
+        
+        if (!cartItems || !totalAmount) return;
+        
+        const formatter = new Intl.NumberFormat('es-AR', {
+            style: 'currency',
+            currency: 'ARS',
+            minimumFractionDigits: 2
+        });
+        
+        if (!this.cart.length) {
+            cartItems.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align: center">
+                        El carrito está vacío
+                    </td>
+                </tr>`;
+            totalAmount.textContent = formatter.format(0);
+            return;
+        }
+
+        cartItems.innerHTML = this.cart.map(item => `
+            <tr>
+                <td><img src="${item.image}" alt="${item.title}" style="width: 30px; height: 30px;"></td>
+                <td>${item.title}</td>
+                <td>
+                    <input type="number" 
+                        value="${item.quantity}" 
+                        min="0" 
+                        class="quantity-input" 
+                        data-product-id="${item.id}"
+                    >
+                </td>
+                <td>${formatter.format(item.price)}</td>
+
+                <td>${formatter.format(item.price * item.quantity)}</td>
+               
+            </tr>
+        `).join('');
+
+        const total = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        totalAmount.textContent = formatter.format(total);
+
+        // Add event listeners for quantity inputs and delete buttons
+        this.initializeCartControls();
+    }
+
+    private initializeCartControls() {
+        // Quantity input handlers
+        this.querySelectorAll('.quantity-input').forEach(input => {
+            input.addEventListener('change', (e) => {
+                const target = e.target as HTMLInputElement;
+                const productId = Number(target.dataset.productId);
+                const newQuantity = Number(target.value);
+                
+                const item = this.cart.find(item => item.id === productId);
+                if (!item) return;
+
+                if (newQuantity <= 0) {
+                    // Eliminar el producto si la cantidad es 0 o menor
+                    this.cart = this.cart.filter(item => item.id !== productId);
+                    const event = new CustomEvent('showMessage', {
+                        detail: {
+                            type: 'info',
+                            title: 'Producto Eliminado',
+                            content: `Se eliminó "${item.title}" del carrito`,
+                            button: 'Aceptar'
+                        }
+                    });
+                    document.dispatchEvent(event);
+                } else {
+                    // Actualizar cantidad si es mayor a 0
+                    item.quantity = newQuantity;
+                    const event = new CustomEvent('showMessage', {
+                        detail: {
+                            type: 'info',
+                            title: 'Cantidad Actualizada',
+                            content: `Se actualizó la cantidad de "${item.title}" a ${newQuantity}`,
+                            button: 'Aceptar'
+                        }
+                    });
+                    document.dispatchEvent(event);
+                }
+
+                // Actualizar localStorage y UI
+                localStorage.setItem('cart', JSON.stringify(this.cart));
+                this.updateCartDisplay();
+            });
+        });
+
+        // Delete button handlers
+        this.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const target = e.target as HTMLElement;
+                const deleteButton = target.closest('.delete-button') as HTMLElement;
+                const productId = Number(deleteButton?.dataset.productId);
+                
+                const item = this.cart.find(item => item.id === productId);
+                if (item) {
+                    this.cart = this.cart.filter(item => item.id !== productId);
+                    localStorage.setItem('cart', JSON.stringify(this.cart));
+                    this.updateCartDisplay();
+
+                    const event = new CustomEvent('showMessage', {
+                        detail: {
+                            type: 'info',
+                            title: 'Producto Eliminado',
+                            content: `Se eliminó "${item.title}" del carrito`,
+                            button: 'Aceptar'
+                        }
+                    });
+                    document.dispatchEvent(event);
+                }
+            });
+        });
+    }
+
+    private showError(message: string) {
+        const event = new CustomEvent('showMessage', {
+            detail: {
+                type: 'error',
+                title: 'Error en la Tienda',
+                content: message,
+                button: 'Aceptar'
+            }
+        });
+        document.dispatchEvent(event);
+    }
+}
+
+customElements.define('store-window', StoreWindow);
+</script>
+
+<style>
+.window {
+    width: 700px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 400px;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.window-body {
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#cartContent {
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+}
+
+.field-row {
+    margin-bottom: 16px;
+    flex-shrink: 0;
+}
+
+.status-bar {
+    flex-shrink: 0;
+    margin-top: auto;
+    border-top: 1px solid #808080;
+    padding: 4px;
+}
+
+
+
+/* Ensure table header stays visible */
+thead {
+    position: sticky;
+    top: 0;
+    background: #c0c0c0;
+    z-index: 1;
+}
+
+/* Maintain Windows 98 scrollbar style */
+#cartContent::-webkit-scrollbar {
+    width: 16px;
+    background: #dfdfdf;
+}
+
+#cartContent::-webkit-scrollbar-thumb {
+    background: silver;
+    border: 1px solid #808080;
+    box-shadow: inset 1px 1px #dfdfdf, inset -1px -1px gray;
+}
+
+#cartContent::-webkit-scrollbar-button:single-button {
+    background: silver;
+    border: 1px solid #808080;
+    box-shadow: inset 1px 1px #dfdfdf, inset -1px -1px gray;
+    width: 16px;
+    height: 16px;
+}
+
+.resize-handle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 15px;
+    height: 15px;
+    cursor: se-resize;
+    background: linear-gradient(135deg, transparent 50%, #808080 50%);
+}
+
+.title-bar {
+    cursor: move;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 300px;
+}
+
+th, td {
+    border: 1px solid #808080;
+    padding: 4px 8px;
+    text-align: left;
+}
+
+@media screen and (max-width: 600px) {
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .window {
+        width: 95% !important;
+        min-width: 300px !important;
+    }
+
+    td img {
+        width: 24px !important;
+        height: 24px !important;
+    }
+
+    .field-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .field-row input, 
+    .field-row button {
+        width: 100%;
+    }
+}
+
+/* Make sure horizontal scroll looks Windows 98 style */
+table::-webkit-scrollbar {
+    height: 16px;
+    background: #dfdfdf;
+}
+
+table::-webkit-scrollbar-thumb {
+    background: silver;
+    border: 1px solid #808080;
+    box-shadow: inset 1px 1px #dfdfdf, inset -1px -1px gray;
+}
+
+table::-webkit-scrollbar-button:single-button {
+    background: silver;
+    border: 1px solid #808080;
+    box-shadow: inset 1px 1px #dfdfdf, inset -1px -1px gray;
+    width: 16px;
+    height: 16px;
+}
+
+/* Ensure content doesn't overflow */
+.product-title {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 400px) {
+    .product-title {
+        max-width: 120px;
+    }
+}
+
+#quantity {
+    width: 80px;
+}
+
+#productId {
+    width: 120px;
+}
+</style> 

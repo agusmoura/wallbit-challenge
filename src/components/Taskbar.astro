@@ -1,0 +1,123 @@
+<div class="taskbar">
+    <button class="start-button">
+        <img src="/assets/start.png" alt="Start" width="16" height="16">
+        Inicio
+    </button>
+    <div class="taskbar-divider"></div>
+    <div class="taskbar-items" id="taskbarItems"></div>
+    <div class="taskbar-divider"></div>
+    <div class="taskbar-status">
+        <div class="taskbar-icons">
+            <img class="tray-icon" src="/assets/task.png" data-type="info" data-title="Tareas" data-message="Ey, que haces chusmeando" data-button="bueno, bueno">
+            <img class="tray-icon" src="/assets/audio.png"  data-type="info" data-title="Volumen" data-message="Ya que estas acá, seguime en instagram <h4>@agus_moura1</h4>" data-button="Yendoooo" data-link="https://www.instagram.com/agus_moura1/">
+        </div>
+        <!-- añadir fecha y hora -->
+        <span id="taskbar-date">16/11/2024</span>
+        <span id="taskbar-time">12:00</span>
+    </div>
+</div>
+
+<style>
+.taskbar {
+	height: 27px;
+	border-top: 1px solid #fff;
+    position: absolute;
+    z-index: 5000;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 27px;
+	position: fixed;
+	bottom: 0;
+	width: calc(100% - 5px);
+	display: flex;
+	align-items: center;
+	padding: 2px;
+    outline: 1px solid #dfdfdf;
+    border-top: 1px solid #fff;
+    background: #c0c0c0;
+    color: #000;
+}
+
+.start-button {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	padding: 2px 8px;
+	height: 22px;
+	font-weight: bold;
+	margin-right: 2px;
+}
+
+.taskbar-divider {
+	width: 1px;
+	height: 22px;
+	background: #888;
+	margin: 0 4px;
+	box-shadow: 1px 0 #fff;
+}
+
+.taskbar-items {
+    flex: 1;
+    display: flex;
+    gap: 2px;
+    padding: 2px;
+    overflow-x: auto;
+}
+
+.taskbar-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 120px;
+    max-width: 200px;
+    height: 22px;
+    padding: 0 4px;
+    background: silver;
+    box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff;
+    font-size: 11px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.taskbar-item.active {
+    background: #000080;
+    color: white;
+    box-shadow: inset -1px -1px #fff, inset 1px 1px #0a0a0a;
+}
+
+.taskbar-item img {
+    flex-shrink: 0;
+}
+
+.taskbar-item:hover:not(.active) {
+    background: #dfdfdf;
+}
+
+.taskbar-status {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+    margin-left: auto;
+    padding: 0 4px;
+    display: flex;
+    flex-direction: row;
+    line-height: 22px;
+    box-sizing: border-box;
+    vertical-align: middle;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(128, 128, 128) rgb(255, 255, 255) rgb(255, 255, 255) rgb(128, 128, 128);
+    background-color: rgb(192, 192, 192);
+    background-color: #c0c0c0;
+    color: rgb(0, 0, 0);
+    font-size: 12px;
+}
+
+.taskbar-icons {
+    display: flex;
+    gap: 4px;
+}
+</style>

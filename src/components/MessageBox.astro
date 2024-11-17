@@ -1,0 +1,104 @@
+<template id="message-box-template">
+    <div class="message-box window">
+        <div class="title-bar">
+            <div class="title-bar-text"></div>
+            <div class="title-bar-controls">
+                <button aria-label="Close" class="close-button"></button>
+            </div>
+        </div>
+        <div class="window-body">
+            <div class="message-content">
+                <img width="32" height="32">
+                <p></p>
+            </div>
+            <div class="button-container">
+                <button class="ok-button">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+class MessageBox extends HTMLElement {
+    constructor() {
+        super();
+        const template = document.getElementById('message-box-template') as HTMLTemplateElement;
+        const content = template.content.cloneNode(true) as DocumentFragment;
+        this.appendChild(content);
+
+        const audio = new Audio('/assets/chord.wav');
+        audio.play();
+
+        const type = this.getAttribute('type') || 'info';
+        const title = this.getAttribute('title') || 'Message';
+        const message = this.getAttribute('content') || '';
+        const button = this.getAttribute('button') || 'Aceptar';
+        const link = this.getAttribute('link') || '';
+
+
+        const messageBox = this.querySelector('.message-box');
+        const titleElement = this.querySelector('.title-bar-text');
+        const contentElement = this.querySelector('.message-content p');
+        const imgElement = this.querySelector('.message-content img');
+        const buttonElement = this.querySelector('.ok-button');
+
+        if (titleElement) titleElement.textContent = title;
+        if (contentElement) contentElement.innerHTML = message;
+        if (imgElement) imgElement.setAttribute('src', `/assets/${type}.png`);
+        if (buttonElement) buttonElement.textContent = button;
+        
+        if (link !== '' && buttonElement){
+            buttonElement.setAttribute('href', link);
+            buttonElement.setAttribute('target', '_blank');
+        }
+        this.querySelector('.close-button')?.addEventListener('click', () => this.remove());
+        this.querySelector('.ok-button')?.addEventListener('click', () => this.remove());
+
+        this.addEventListener('click', (event) => {
+            if (event.target === buttonElement && link !== '') {
+                window.open(link, '_blank');
+            }
+        });
+    }
+}
+
+customElements.define('message-box', MessageBox);
+</script>
+
+<style>
+.message-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.message-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin: 16px;
+}
+
+.message-content img {
+    image-rendering: pixelated;
+}
+
+.message-content p {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    padding: 16px;
+}
+
+.ok-button {
+    min-width: 80px;
+}
+</style>

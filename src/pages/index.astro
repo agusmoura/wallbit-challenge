@@ -1,0 +1,26 @@
+---
+import MainLayout from '@layouts/MainLayout.astro';
+import Desktop from '@layouts/Desktop.astro';
+import DesktopIcon from '@components/DesktopIcon.astro';
+---
+
+<MainLayout title="Tienda El Topo">
+    <Desktop>
+        <DesktopIcon 
+            name="Mi PC" 
+            id="computer" 
+            icon="computer.png"
+        />
+        <DesktopIcon 
+            name="Papelera" 
+            id="trash" 
+            icon="trash.png"
+        />
+        <DesktopIcon 
+            name="Tienda El Topo" 
+            id="tienda" 
+            icon="agent.png"
+        />
+			
+    </Desktop>
+</MainLayout>

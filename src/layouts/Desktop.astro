@@ -1,0 +1,56 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+    class?: string;
+}
+
+const { class: className, ...props } = Astro.props;
+---
+
+<div id="desktop" draggable="false" class:list={["desktop", className]} {...props}>
+    <slot />
+</div>
+
+<style>
+.desktop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 27px; /* altura de la taskbar */
+    display: grid;
+    grid-template-columns: repeat(1);
+    grid-auto-rows: 90px;
+    gap: 8px;
+    padding: 8px;
+    overflow: auto;
+    user-select: none;
+}
+</style>
+
+<script>
+    // Manejo de selección de iconos
+    const desktop = document.getElementById('desktop');
+    let selectedIcon: HTMLElement | null = null;
+
+    if (desktop) {
+        desktop.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement;
+            const icon = target.closest('.desktop-icon');
+
+            // Deseleccionar icono previo
+            if (selectedIcon && selectedIcon !== icon) {
+                const label = (selectedIcon as HTMLElement).querySelector('.desktop-icon-label');
+                if (label) (label as HTMLElement).style.background = 'transparent';
+            }
+
+            // Seleccionar nuevo icono
+            if (icon) {
+                selectedIcon = icon as HTMLElement;
+                const label = (icon as HTMLElement).querySelector('.desktop-icon-label');
+                if (label) (label as HTMLElement).style.background = '#000080';
+            }
+        });
+    }
+</script> 

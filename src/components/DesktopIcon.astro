@@ -1,0 +1,56 @@
+---
+interface Props {
+    name: string;
+    id: string;
+    icon: string;
+}
+
+const { name, id, icon } = Astro.props;
+---
+
+<div class="desktop-icon" data-id={id}>
+    <img src={`/assets/${icon}`} alt={name} width="32" height="32">
+    <span class="desktop-icon-label">{name}</span>
+</div>
+
+<style>
+.desktop-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 75px;
+    padding: 4px;
+    cursor: pointer;
+    color: white;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+}
+
+
+
+.desktop-icon img {
+    image-rendering: pixelated;
+    overflow-clip-margin: content-box;
+    overflow: clip;
+}
+
+.desktop-icon-label {
+    font-size: 11px;
+    text-align: center;
+    word-wrap: break-word;
+    padding: 0 4px;
+}
+</style>
+
+<script>
+    // Manejo de eventos del icono
+    document.querySelectorAll('.desktop-icon').forEach(icon => {
+        icon.addEventListener('dblclick', (e) => {
+            const target = e.currentTarget as HTMLElement;
+            const id = target.dataset.id;
+            // Aquí puedes emitir un evento personalizado o llamar a una función
+            const event = new CustomEvent('openWindow', { detail: { id } });
+            document.dispatchEvent(event);
+        });
+    });
+</script> 

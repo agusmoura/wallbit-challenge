@@ -1,0 +1,178 @@
+/* Estilos globales */
+* {
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	border: 0;
+	height: 100vh;
+	overflow: hidden;
+	background-image: url('/assets/clouds.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+	background-size: cover;
+	background-position: center;
+	touch-action: none;
+    user-select: none;
+}
+
+h4 {
+    margin: 1rem;
+}
+
+/* Estilos de ProductList */
+.product-list-window {
+    width: 800px;
+    height: 600px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.product-list-window-body {
+    padding: 16px;
+    overflow: auto;
+    background: silver;
+    height: calc(100% - 60px); /* Adjust for title bar and status bar */
+    display: flex;
+    flex-direction: column;
+}
+
+.quantity-input {
+    width: 50px;
+}
+
+#productsGrid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid #808080;
+    max-height: 100%;
+    overflow: auto;
+}
+
+.product-card {
+    border: 1px solid #808080;
+    padding: 16px;
+    background: white;
+    box-shadow: inset 1px 1px #dfdfdf, inset -1px -1px gray;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.product-card img {
+    height: 100px;
+    object-fit: contain;
+    background: white;
+    padding: 8px;
+    border: 1px solid #808080;
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.product-info h4 {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.2;
+    height: 2.4em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-id {
+    color: #0000ff;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 12px;
+    margin:0;
+}
+
+.price {
+    font-weight: bold;
+    color: #008000;
+    font-size: 16px;
+    margin-top: auto;
+    text-align: right;
+    position: absolute;
+    bottom: -4px;
+    margin: 0;
+    right: 0;
+}
+
+.product-actions {
+    padding-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.add-to-cart-button {
+    width: 100%;
+}
+
+/* Estilos para Store */
+.field-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.field-row label {
+    white-space: nowrap;
+    min-width: 120px;
+}
+
+.field-row input[type="text"],
+.field-row input[type="number"] {
+    flex: 1;
+    min-width: 100px;
+    max-width: 200px;
+}
+
+.field-row button {
+    white-space: nowrap;
+}
+
+/* Media queries para diferentes tamaños de pantalla */
+@media (max-width: 600px) {
+    .field-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .field-row label {
+        min-width: auto;
+    }
+
+    .field-row input[type="text"],
+    .field-row input[type="number"] {
+        flex: 1;
+        min-width: 100px;
+        max-width: 200px;
+    }
+
+    .field-row button {
+        white-space: nowrap;
+    }
+}
+
+
+.taskbar-item{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
