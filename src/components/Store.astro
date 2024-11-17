@@ -249,15 +249,7 @@ class StoreWindow extends HTMLElement {
                 } else {
                     // Actualizar cantidad si es mayor a 0
                     item.quantity = newQuantity;
-                    const event = new CustomEvent('showMessage', {
-                        detail: {
-                            type: 'info',
-                            title: 'Cantidad Actualizada',
-                            content: `Se actualizó la cantidad de "${item.title}" a ${newQuantity}`,
-                            button: 'Aceptar'
-                        }
-                    });
-                    document.dispatchEvent(event);
+                   
                 }
 
                 // Actualizar localStorage y UI
