@@ -99,7 +99,7 @@ class ProductList extends HTMLElement {
                 <img src="${product.image}" alt="${product.title}">
                 <div class="product-info">
                     <h4>${product.title}</h4>
-                    <p class="product-id" title="Doble click para copiar">ID: ${product.id}</p>
+                    <p class="product-id">ID: ${product.id}</p>
                     <p class="price">${formatter.format(product.price)}</p>
                 </div>
                 <div class="product-actions">
@@ -149,7 +149,7 @@ class ProductList extends HTMLElement {
                     detail: {
                         type: 'info',
                         title: 'Producto Agregado',
-                        content: `Se agregó ${product.title} al carrito.<br>Cantidad actual: ${existingItem ? existingItem.quantity + 1 : 1}`,
+                        content: `Se agregó ${product.title} al carrito.<br>Cantidad actual: ${existingItem ? existingItem.quantity : 1}`,
                         button: 'Aceptar',
                         link: ''
                     }
