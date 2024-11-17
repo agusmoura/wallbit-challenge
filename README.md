@@ -1,54 +1,113 @@
-# Astro Starter Kit: Basics
+# 🖥️ Tienda El Topo - Windows 98 Style
 
-```sh
-npm create astro@latest -- --template basics
+## Wallbit Junior Frontend Challenge
+
+Una aplicación web estilo Windows 98 que simula una tienda online, construida con Astro, moldeada a javascript vanilla y diseñada para ofrecer una experiencia nostálgica.
+
+## 📸 Captura de pantalla
+
+![tienda-el-topo](./public/captura1.png)
+![tienda-el-topo](./public/captura2.png)
+
+## ✨ Características
+
+🎨 Interfaz de usuario que replica fielmente Windows 98
+🛍️ Tienda funcional con carrito de compras
+💾 Persistencia de datos en localStorage
+🖱️ Ventanas arrastrables y redimensionables
+📱 Diseño responsive
+⌨️ Soporte completo para teclado y mouse
+🔊 Efectos de sonido retro
+🕒 Reloj funcional en la barra de tareas
+
+## 🚀 Tecnologías
+
+- [Astro](https://astro.build/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [98.css](https://jdan.github.io/98.css/)
+- [Fake Store API](https://fakestoreapi.com/)
+
+## 📦 Instalación
+
+1. Clona el repositorio:
+
+```bash
+git clone https://github.com/agusmoura/wallbit-challenge.git
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+2. Instala las dependencias:
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+```bash
+cd tienda-el-topo
+npm install
+```
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+3. Inicia el servidor de desarrollo:
 
-## 🚀 Project Structure
+```bash
+npm run dev
+```
 
-Inside of your Astro project, you'll see the following folders and files:
+## 🛠️ Comandos Disponibles
 
-```text
+```bash
+npm run dev      # Inicia el servidor de desarrollo
+npm run build    # Construye el proyecto para producción
+npm run preview  # Previsualiza la build de producción
+```
+
+## 🌟 Funcionalidades Principales
+
+### Sistema de Ventanas
+
+- Arrastrar y soltar ventanas
+- Redimensionar ventanas
+- Minimizar, maximizar y cerrar
+- Barra de tareas funcional
+
+### Tienda
+
+- Catálogo de productos
+- Carrito de compras
+- Persistencia de datos
+- Gestión de cantidades
+- Cálculo automático de totales
+
+### Interfaz Retro
+
+- Diseño inspirado en Windows 98
+- Efectos de sonido retro
+- Tipografía y paleta de colores inspirados en Windows 98
+
+## 📁 Estructura del Proyecto
+
+```
 /
 ├── public/
-│   └── favicon.svg
+│   └── assets/        # Imágenes e iconos
 ├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
+│   ├── components/    # Componentes Astro
+│   ├── layouts/       # Layouts de la aplicación
+│   ├── pages/         # Páginas
+│   ├── scripts/       # Lógica TypeScript
+│   └── styles/        # Estilos CSS
 └── package.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 🤝 Contribuir
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+1. Haz fork del proyecto
+2. Crea una rama para tu feature (git checkout -b feature/AmazingFeature)
+3. Commit tus cambios (git commit -m 'Add some AmazingFeature')
+4. Push a la rama (git push origin feature/AmazingFeature)
+5. Abre un Pull Request
 
-Any static assets, like images, can be placed in the `public/` directory.
+## 👥 Autores
 
-## 🧞 Commands
+- [Agustín Moura](https://github.com/agusmoura)
 
-All commands are run from the root of the project, from a terminal:
+## 🙏 Agradecimientos
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+Agradezco a Wallbit por la oportunidad de participar en este desafí y a [Goncy](https://github.com/goncy) por hacer publico el desafio
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+⌨️ con ❤️ por [Agustin Mouriño](https://github.com/agusmoura)
