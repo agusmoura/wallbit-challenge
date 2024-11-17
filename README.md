@@ -6,8 +6,8 @@ Una aplicación web estilo Windows 98 que simula una tienda online, construida c
 
 ## 📸 Captura de pantalla
 
-![tienda-el-topo](./public/captura1.png)
-![tienda-el-topo](./public/captura2.png)
+![tienda-el-topo](https://github.com/agusmoura/wallbit-challenge/blob/main/public/captura1.jpg?raw=true)
+![tienda-el-topo](https://github.com/agusmoura/wallbit-challenge/blob/main/public/captura2.jpg?raw=true)
 
 ## ✨ Características
 
