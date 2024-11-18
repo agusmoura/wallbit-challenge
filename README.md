@@ -25,10 +25,11 @@ Una aplicación web estilo Windows 98 que simula una tienda online, construida c
 
 ## 🚀 Tecnologías
 
-- [Astro](https://astro.build/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [98.css](https://jdan.github.io/98.css/)
-- [Fake Store API](https://fakestoreapi.com/)
+![Astro](https://skillicons.dev/icons?i=astro)
+![TypeScript](https://skillicons.dev/icons?i=typescript)
+![CSS](https://skillicons.dev/icons?i=css)
+![98.css](https://jdan.github.io/98.css/icon.png)
+![FakeStoreAPI](https://fakestoreapi.com/icons/logo.png)
 
 ## 📦 Instalación
 
@@ -107,7 +108,7 @@ npm run preview  # Previsualiza la build de producción
 
 ## 👥 Autores
 
-- [Agustín Moura](https://github.com/agusmoura)
+- [Agustín Mouriño](https://github.com/agusmoura)
 
 ## 🙏 Agradecimientos
 
