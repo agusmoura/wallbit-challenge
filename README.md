@@ -6,8 +6,9 @@ Una aplicación web estilo Windows 98 que simula una tienda online, construida c
 
 ## 📸 Captura de pantalla
 
-![tienda-el-topo](https://github.com/agusmoura/wallbit-challenge/blob/main/public/captura1.jpg?raw=true)
-![tienda-el-topo](https://github.com/agusmoura/wallbit-challenge/blob/main/public/captura2.jpg?raw=true)
+![captura1](https://github.com/user-attachments/assets/a47636b9-289f-44f8-b980-a20ea2755de0)
+![captura2](https://github.com/user-attachments/assets/5f277601-c16f-437d-b4bd-f34d8aeb4cc2)
+![captura3](https://github.com/user-attachments/assets/4be7ab8c-f66d-4cec-b32e-036c37743680)
 
 ## ✨ Características
 
@@ -15,10 +16,12 @@ Una aplicación web estilo Windows 98 que simula una tienda online, construida c
 🛍️ Tienda funcional con carrito de compras
 💾 Persistencia de datos en localStorage
 🖱️ Ventanas arrastrables y redimensionables
-📱 Diseño responsive
-⌨️ Soporte completo para teclado y mouse
+📱 Diseño responsive (soporte completo touch para mobile)
+⌨️ Soporte completo para teclado y mouse (Desktop)
 🔊 Efectos de sonido retro
 🕒 Reloj funcional en la barra de tareas
+🧮 Calculadora nativa de Windows (Desktop)
+🔗 Abrir links externos
 
 ## 🚀 Tecnologías
 
