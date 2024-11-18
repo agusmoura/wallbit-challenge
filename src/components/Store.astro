@@ -28,8 +28,10 @@ const cartCreationDate = new Date().toLocaleString();
         <div class="window-body">
             <div class="field-row" style="margin-bottom: 20px;">
                 <label>Agregar al carrito:</label>
-                <input type="text" placeholder="ID del Producto" id="productId">
-                <input type="number" placeholder="Cantidad" id="quantity" min="1">
+                <div class="field-row-inputs">  
+                    <input type="text" placeholder="ID del Producto" id="productId">
+                    <input type="number" placeholder="Cantidad" id="quantity" min="1">
+                </div>
                 <button id="addToCart">Agregar</button>
                 <button id="viewProducts">Ver Productos</button>
             </div>
@@ -47,7 +49,7 @@ const cartCreationDate = new Date().toLocaleString();
                     </thead>
                     <tbody id="cartItems">
                         <tr>
-                            <td colspan="6" style="text-align: center">
+                            <td colspan="5" style="text-align: center">
                                 El carrito está vacío
                             </td>
                         </tr>
@@ -97,7 +99,7 @@ class StoreWindow extends HTMLElement {
         taskbarItem.className = 'taskbar-item active';
         taskbarItem.innerHTML = `
             <img src="/assets/agent.png" alt="Store" width="16" height="16">
-            Tienda El Topo
+            <span>Tienda El Topo</span>
         `;
         taskbarItems?.appendChild(taskbarItem);
 
@@ -200,7 +202,7 @@ class StoreWindow extends HTMLElement {
         cartItems.innerHTML = this.cart.map(item => `
             <tr>
                 <td><img src="${item.image}" alt="${item.title}" style="width: 30px; height: 30px;"></td>
-                <td>${item.title}</td>
+                <td class="product-title">${item.title}</td>
                 <td>
                     <input type="number" 
                         value="${item.quantity}" 
@@ -328,6 +330,7 @@ customElements.define('store-window', StoreWindow);
     display: flex;
     flex-direction: column;
     min-height: 0;
+    width: 100%;
 }
 
 table {
@@ -455,18 +458,7 @@ table::-webkit-scrollbar-button:single-button {
 }
 
 /* Ensure content doesn't overflow */
-.product-title {
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 
-@media screen and (max-width: 400px) {
-    .product-title {
-        max-width: 120px;
-    }
-}
 
 #quantity {
     width: 80px;
@@ -474,5 +466,10 @@ table::-webkit-scrollbar-button:single-button {
 
 #productId {
     width: 120px;
+}
+
+.field-row-inputs {
+    display: flex;
+    gap: 8px;
 }
 </style> 

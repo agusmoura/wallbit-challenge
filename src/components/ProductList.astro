@@ -55,7 +55,7 @@ class ProductList extends HTMLElement {
         taskbarItem.className = 'taskbar-item active';
         taskbarItem.innerHTML = `
             <img src="/assets/product-search.png" alt="Products" width="16" height="16">
-            Productos Disponibles
+            <span>Productos Disponibles</span>
         `;
         taskbarItems?.appendChild(taskbarItem);
 
@@ -149,7 +149,7 @@ class ProductList extends HTMLElement {
                     detail: {
                         type: 'info',
                         title: 'Producto Agregado',
-                        content: `Se agregó ${product.title} al carrito.<br>Cantidad actual: ${existingItem ? existingItem.quantity : 1}`,
+                        content: `Se agregó<br/> <b>${product.title}</b> al carrito.<br>Cantidad actual: <b>${existingItem ? existingItem.quantity : 1}</b>`,
                         button: 'Aceptar',
                         link: ''
                     }
