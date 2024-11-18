@@ -126,7 +126,13 @@ class Win98Manager implements WindowManager {
         window.open("https://wallbit.io/", "_blank");
         break;
       case "calculator":
-        window.open("Calculator:///", "_blank");
+        console.log(navigator.userAgent.toLowerCase());
+
+        if (navigator.userAgent.toLowerCase().includes("win")) {
+          window.open("Calculator:///", "_blank");
+        } else {
+          window.open("https://calculator.apps.chrome/", "_blank");
+        }
         break;
       default:
         console.log(`No handler for icon: ${id}`);
