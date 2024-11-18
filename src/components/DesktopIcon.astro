@@ -43,14 +43,39 @@ const { name, id, icon } = Astro.props;
 </style>
 
 <script>
-    // Manejo de eventos del icono
     document.querySelectorAll('.desktop-icon').forEach(icon => {
+        let lastTap = 0;
+        let touchTimeout: number;
+
+        // Manejador de doble click tradicional
         icon.addEventListener('dblclick', (e) => {
             const target = e.currentTarget as HTMLElement;
             const id = target.dataset.id;
-            // Aquí puedes emitir un evento personalizado o llamar a una función
             const event = new CustomEvent('openWindow', { detail: { id } });
             document.dispatchEvent(event);
+        });
+
+        // Manejador de eventos táctiles
+        icon.addEventListener('touchend', (e) => {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            const target = e.currentTarget as HTMLElement;
+            
+            clearTimeout(touchTimeout);
+
+            if (tapLength < 500 && tapLength > 0) {
+                // Doble tap detectado
+                const id = target.dataset.id;
+                const event = new CustomEvent('openWindow', { detail: { id } });
+                document.dispatchEvent(event);
+                e.preventDefault();
+            } else {
+                // Primer tap
+                touchTimeout = setTimeout(() => {
+                    // Manejar tap simple si es necesario
+                }, 500);
+            }
+            lastTap = currentTime;
         });
     });
 </script> 
