@@ -150,8 +150,10 @@ export class WindowControls {
         this.window.style.top = "0";
         this.window.style.left = "0";
         this.window.style.transform = "none";
+        this.window.classList.add("maximized");
       } else {
         Object.assign(this.window.style, this.originalStyles);
+        this.window.classList.remove("maximized");
       }
       this.isMaximized = !this.isMaximized;
     });
