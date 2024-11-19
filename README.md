@@ -107,7 +107,7 @@ npm run preview  # Previsualiza la build de producción
 
 ## 👥 Autores
 
-- [Agustín Moura](https://github.com/agusmoura)
+- [Agustín Mouriño](https://github.com/agusmoura)
 
 ## 🙏 Agradecimientos
 
