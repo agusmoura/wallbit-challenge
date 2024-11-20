@@ -51,7 +51,7 @@ class MessageBox extends HTMLElement {
         if (titleElement) titleElement.textContent = title;
         
         // if (contentElement) contentElement.innerHTML = message;
-        if (contentElement && type !== 'image') contentElement.textContent = message;
+        if (contentElement && type !== 'image') contentElement.innerHTML = message;
         else if (contentElement && type === 'image'){
             /* crea imagen */
             const img = document.createElement('img');
