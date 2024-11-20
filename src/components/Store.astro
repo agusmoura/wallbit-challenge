@@ -34,6 +34,7 @@ const cartCreationDate = new Date().toLocaleString();
                 </div>
                 <button id="addToCart">Agregar</button>
                 <button id="viewProducts">Ver Productos</button>
+                <button id="clearCart">Limpiar Carrito</button>
             </div>
 
             <div id="cartContent">
@@ -45,12 +46,13 @@ const cartCreationDate = new Date().toLocaleString();
                             <th>Cant</th>
                             <th>Precio Unit.</th>
                             <th>Total</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="cartItems">
                         <tr>
-                            <td colspan="5" style="text-align: center">
-                                El carrito está vacío
+                            <td colspan="5" style="text-align: center;">
+                                <span id="cartEmptyMessage">El carrito está vacío</span>
                             </td>
                         </tr>
                     </tbody>
@@ -60,6 +62,7 @@ const cartCreationDate = new Date().toLocaleString();
                             <td colspan="1" id="totalAmount" style="font-weight: bold;">
                                 $0
                             </td>
+                            <td colspan="1"></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -127,6 +130,7 @@ class StoreWindow extends HTMLElement {
             productElement.innerHTML = '<product-list></product-list>';
             document.body.appendChild(productElement.firstElementChild!);
         });
+        this.querySelector('#clearCart')?.addEventListener('click', () => this.clearCart());
     }
 
     private async addToCart() {
@@ -192,7 +196,7 @@ class StoreWindow extends HTMLElement {
             cartItems.innerHTML = `
                 <tr>
                     <td colspan="6" style="text-align: center">
-                        El carrito está vacío
+                        <span id="cartEmptyMessage">El carrito está vacío</span>
                     </td>
                 </tr>`;
             totalAmount.textContent = formatter.format(0);
@@ -201,7 +205,13 @@ class StoreWindow extends HTMLElement {
 
         cartItems.innerHTML = this.cart.map(item => `
             <tr>
-                <td><img src="${item.image}" alt="${item.title}" style="width: 30px; height: 30px;"></td>
+                <td>
+                    <img src="${item.image}" 
+                        alt="${item.title}" 
+                        style="width: 30px; height: 30px; cursor: pointer;"
+                        class="cart-product-image"
+                    >
+                </td>
                 <td class="product-title">${item.title}</td>
                 <td>
                     <input type="number" 
@@ -212,9 +222,12 @@ class StoreWindow extends HTMLElement {
                     >
                 </td>
                 <td>${formatter.format(item.price)}</td>
-
                 <td>${formatter.format(item.price * item.quantity)}</td>
-               
+                <td>
+                    <button class="delete-button" data-product-id="${item.id}">
+                        <img src="/assets/remove.png" alt="Eliminar" width="16" height="16">
+                    </button>
+                </td>
             </tr>
         `).join('');
 
@@ -285,6 +298,25 @@ class StoreWindow extends HTMLElement {
                 }
             });
         });
+
+        // Image click handler
+        this.querySelectorAll('.cart-product-image').forEach(img => {
+            img.addEventListener('click', (e) => {
+                const target = e.target as HTMLImageElement;
+                const src = target.src;
+                const alt = target.alt;
+
+                const event = new CustomEvent('showMessage', {
+                    detail: {
+                        type: 'image',
+                        title: alt,
+                        content: src,
+                        button: 'Cerrar'
+                    }
+                });
+                document.dispatchEvent(event);
+            });
+        });
     }
 
     private showError(message: string) {
@@ -297,6 +329,32 @@ class StoreWindow extends HTMLElement {
             }
         });
         document.dispatchEvent(event);
+    }
+
+    private clearCart() {
+        const event = new CustomEvent('showMessage', {
+            detail: {
+                type: 'warning',
+                title: 'Limpiar Carrito',
+                content: '¿Está seguro que desea vaciar el carrito?',
+                button: 'Sí, vaciar'
+            }
+        });
+        
+        document.dispatchEvent(event);
+        
+        const messageBoxHandler = (e: Event) => {
+            const messageBox = e.target as HTMLElement;
+            if (messageBox.matches('message-box')) {
+                this.cart = [];
+                // Eliminar completamente el carrito del localStorage
+                localStorage.removeItem('cart');
+                this.updateCartDisplay();
+                document.removeEventListener('click', messageBoxHandler);
+            }
+        };
+        
+        document.addEventListener('click', messageBoxHandler);
     }
 }
 
@@ -477,4 +535,6 @@ table::-webkit-scrollbar-button:single-button {
     display: flex;
     gap: 8px;
 }
+
+
 </style> 

@@ -26,14 +26,20 @@ class MessageBox extends HTMLElement {
         const content = template.content.cloneNode(true) as DocumentFragment;
         this.appendChild(content);
 
-        const audio = new Audio('/assets/chord.wav');
-        audio.play();
-
         const type = this.getAttribute('type') || 'info';
         const title = this.getAttribute('title') || 'Message';
         const message = this.getAttribute('content') || '';
         const button = this.getAttribute('button') || 'Aceptar';
         const link = this.getAttribute('link') || '';
+
+        if (type !== 'image') {
+            const audio = new Audio('/assets/chord.wav');
+            audio.play();
+        }
+
+        if (type === 'image') {
+            this.querySelector('.message-content>img')?.remove();
+        }
 
 
         const messageBox = this.querySelector('.message-box');
@@ -43,7 +49,16 @@ class MessageBox extends HTMLElement {
         const buttonElement = this.querySelector('.ok-button');
 
         if (titleElement) titleElement.textContent = title;
-        if (contentElement) contentElement.innerHTML = message;
+        
+        // if (contentElement) contentElement.innerHTML = message;
+        if (contentElement && type !== 'image') contentElement.textContent = message;
+        else if (contentElement && type === 'image'){
+            /* crea imagen */
+            const img = document.createElement('img');
+            img.src = message;
+            this.querySelector('.message-content')?.appendChild(img);
+            img.classList.add('message-image');
+        }
         if (imgElement) imgElement.setAttribute('src', `/assets/${type}.png`);
         if (buttonElement) buttonElement.textContent = button;
         

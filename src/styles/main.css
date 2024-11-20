@@ -219,3 +219,29 @@ h4 {
 astro-dev-toolbar {
   display: none !important;
 }
+
+.delete-button {
+  padding: 4px;
+  min-width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-button img {
+  image-rendering: pixelated;
+}
+
+#cartEmptyMessage {
+  display: flex;
+  font-size: 18px !important;
+  margin: 0.5rem;
+  justify-content: center;
+}
+
+.message-image {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: contain;
+}
