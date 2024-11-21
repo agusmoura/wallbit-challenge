@@ -337,24 +337,32 @@ class StoreWindow extends HTMLElement {
                 type: 'warning',
                 title: 'Limpiar Carrito',
                 content: '¿Está seguro que desea vaciar el carrito?',
-                button: 'Sí, vaciar'
+                button: 'Sí, vaciar',
             }
         });
         
         document.dispatchEvent(event);
         
-        const messageBoxHandler = (e: Event) => {
-            const messageBox = e.target as HTMLElement;
-            if (messageBox.matches('message-box')) {
+        const messageBoxHandler = (e: CustomEvent) => {
+            if (e.detail.confirmed) {
                 this.cart = [];
-                // Eliminar completamente el carrito del localStorage
                 localStorage.removeItem('cart');
                 this.updateCartDisplay();
-                document.removeEventListener('click', messageBoxHandler);
+                
+                const confirmEvent = new CustomEvent('showMessage', {
+                    detail: {
+                        type: 'info',
+                        title: 'Carrito Vacío',
+                        content: 'El carrito ha sido vaciado exitosamente',
+                        button: 'Aceptar'
+                    }
+                });
+                document.dispatchEvent(confirmEvent);
             }
+            document.removeEventListener('messageBoxResult', messageBoxHandler as EventListener);
         };
         
-        document.addEventListener('click', messageBoxHandler);
+        document.addEventListener('messageBoxResult', messageBoxHandler as EventListener);
     }
 }
 

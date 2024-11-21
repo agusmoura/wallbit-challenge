@@ -13,6 +13,7 @@
             </div>
             <div class="button-container">
                 <button class="ok-button">Aceptar</button>
+                <button class="cancel-button" style="display: none;">Cancelar</button>
             </div>
         </div>
     </div>
@@ -30,6 +31,7 @@ class MessageBox extends HTMLElement {
         const title = this.getAttribute('title') || 'Message';
         const message = this.getAttribute('content') || '';
         const button = this.getAttribute('button') || 'Aceptar';
+        const cancelButton = this.getAttribute('cancelButton');
         const link = this.getAttribute('link') || '';
 
         if (type !== 'image') {
@@ -41,19 +43,16 @@ class MessageBox extends HTMLElement {
             this.querySelector('.message-content>img')?.remove();
         }
 
-
         const messageBox = this.querySelector('.message-box');
         const titleElement = this.querySelector('.title-bar-text');
         const contentElement = this.querySelector('.message-content p');
         const imgElement = this.querySelector('.message-content img');
         const buttonElement = this.querySelector('.ok-button');
+        const cancelButtonElement = this.querySelector('.cancel-button');
 
         if (titleElement) titleElement.textContent = title;
-        
-        // if (contentElement) contentElement.innerHTML = message;
         if (contentElement && type !== 'image') contentElement.innerHTML = message;
-        else if (contentElement && type === 'image'){
-            /* crea imagen */
+        else if (contentElement && type === 'image') {
             const img = document.createElement('img');
             img.src = message;
             this.querySelector('.message-content')?.appendChild(img);
@@ -61,13 +60,32 @@ class MessageBox extends HTMLElement {
         }
         if (imgElement) imgElement.setAttribute('src', `/assets/${type}.png`);
         if (buttonElement) buttonElement.textContent = button;
-        
-        if (link !== '' && buttonElement){
-            buttonElement.setAttribute('href', link);
-            buttonElement.setAttribute('target', '_blank');
+
+        if (cancelButton && cancelButtonElement) {
+            (cancelButtonElement as HTMLElement).style.display = 'block';
+            cancelButtonElement.textContent = cancelButton;
         }
-        this.querySelector('.close-button')?.addEventListener('click', () => this.remove());
-        this.querySelector('.ok-button')?.addEventListener('click', () => this.remove());
+
+        this.querySelector('.close-button')?.addEventListener('click', () => {
+            document.dispatchEvent(new CustomEvent('messageBoxResult', { 
+                detail: { confirmed: false } 
+            }));
+            this.remove();
+        });
+
+        this.querySelector('.ok-button')?.addEventListener('click', () => {
+            document.dispatchEvent(new CustomEvent('messageBoxResult', { 
+                detail: { confirmed: true } 
+            }));
+            this.remove();
+        });
+
+        this.querySelector('.cancel-button')?.addEventListener('click', () => {
+            document.dispatchEvent(new CustomEvent('messageBoxResult', { 
+                detail: { confirmed: false } 
+            }));
+            this.remove();
+        });
 
         this.addEventListener('click', (event) => {
             if (event.target === buttonElement && link !== '') {

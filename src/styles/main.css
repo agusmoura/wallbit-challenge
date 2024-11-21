@@ -245,3 +245,15 @@ astro-dev-toolbar {
   max-height: 300px;
   object-fit: contain;
 }
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+}
+
+.ok-button,
+.cancel-button {
+  min-width: 80px;
+}
