@@ -5,7 +5,6 @@ import Taskbar from "@components/Taskbar.astro";
 import MessageBox from "@components/MessageBox.astro";
 import Store from "@components/Store.astro";
 import ProductList from "@components/ProductList.astro";
-import Analytics from '@vercel/analytics/astro'
 
 interface Props {
 	title: string;
@@ -22,6 +21,7 @@ const { title } = Astro.props;
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/assets/agent.png" />
 		<meta name="generator" content={Astro.generator} />
+		<script defer src="https://analytics.moura.ar/script.js" data-website-id="34c3a336-db2c-4f1f-8ad7-d26c6ed4ae5b"></script>
 		<title>{title}</title>
 	</head>
 	<body>
@@ -33,7 +33,6 @@ const { title } = Astro.props;
 		<script>
 			import "../scripts/index.ts";
 		</script>
-		<Analytics />
 	</body>
 </html>
 
